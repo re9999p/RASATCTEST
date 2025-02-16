@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관제 시험</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        input { font-size: 18px; padding: 10px; margin: 10px; }
+        button { font-size: 20px; padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>관제 시험</h1>
+    <p>로블록스 계정의 User ID를 입력하세요.</p>
+    
+    <input type="text" id="robloxUserId" placeholder="로블록스 User ID 입력">
+    <button onclick="fetchUsername()">계정 이름 확인</button>
+    
+    <p id="usernameDisplay"></p>
+
+    <script>
+        async function fetchUsername() {
+            let userId = document.getElementById("robloxUserId").value;
+            let display = document.getElementById("usernameDisplay");
+
+            if (userId.trim() === "") {
+                display.innerText = "User ID를 입력하세요!";
+                return;
+            }
+
+            let apiUrl = `https://users.roblox.com/v1/users/${userId}`;
+
+            try {
+                let response = await fetch(apiUrl);
+                let data = await response.json();
+
+                if (data.name) {
+                    display.innerText = `로블록스 계정 이름: ${data.name}`;
+                } else {
+                    display.innerText = "유효하지 않은 User ID입니다.";
+                }
+            } catch (error) {
+                display.innerText = "API 요청 실패!";
+            }
+        }
+    </script>
+</body>
+</html>
